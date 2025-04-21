@@ -14,7 +14,7 @@ class User
   field :provider,          type: String, default: 'email'
   field :uid,               type: String, default: ''
   field :tokens,            type: Hash, default: {}
-  field :confirmed_at,      type: Time
+  field :confirmed_at,      type: Time, default: -> { Time.zone.now }
 
 
   field :name,              type: String
@@ -32,7 +32,14 @@ class User
   before_validation :set_uid
   before_validation :normalize_email
 
+  # Skip confirmation
+  before_create :skip_confirmation!
+
   private
+
+  def skip_confirmation!
+    self.confirmed_at = Time.zone.now
+  end
 
   def set_uid
     self.uid = email if uid.blank? && email.present?

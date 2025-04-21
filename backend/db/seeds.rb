@@ -2,10 +2,12 @@ Message.delete_all
 User.delete_all
 
 10.times do
-  email = Faker::Internet.email
-	password = '123456'
+  full_name = Faker::TvShows::Simpsons.character
+  first_name = full_name.split(' ').first.downcase
+  email = "#{first_name}@simpsons.com"
+  password = '123456'
   user = User.new(
-    name: Faker::TvShows::Simpsons.character,
+    name: full_name,
     email: email,
     password: password,
     password_confirmation: password,
@@ -17,15 +19,18 @@ User.delete_all
 
   if user.valid?
     user.save!
-		puts "User created: #{user.name}"
+    puts "User created: #{user.name}"
+    puts "Login with:"
+    puts "  Email: #{email}"
+    puts "  Password: #{password}"
+    puts "----------------------------------------"
   else
-    puts "User validation failed: #{user.errors.full_messages.join(', ')}"
+    puts "D'oh! User validation failed: #{user.errors.full_messages.join(', ')}"
   end
 end
 
 # Get all valid user IDs
 valid_user_ids = User.all.pluck(:id)
-
 
 
 50.times do
@@ -42,7 +47,6 @@ valid_user_ids = User.all.pluck(:id)
 
   if message.valid?
     message.save!
-    puts "Message created successfully"
   else
     puts "Errors: #{message.errors.full_messages.join(', ')}"
   end

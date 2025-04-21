@@ -40,11 +40,16 @@ module Api
             response.headers['uid'] = @resource.uid
             response.headers['token-type'] = 'Bearer'
 
+            # Log headers being set
+            Rails.logger.debug "Setting auth headers:"
+            Rails.logger.debug "access-token: #{@token}"
+            Rails.logger.debug "client: #{@client_id}"
+            Rails.logger.debug "uid: #{@resource.uid}"
+
             render json: {
               data: @resource.as_json(except: [:tokens, :created_at, :updated_at]),
-              token: @token,
-              client_id: @client_id
-            }
+              success: true
+            }, status: :ok
           else
             render json: { error: 'Invalid email or password' }, status: :unauthorized
           end

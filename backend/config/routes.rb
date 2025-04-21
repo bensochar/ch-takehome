@@ -11,9 +11,13 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-        sessions: 'api/v1/auth/sessions'
+        registrations: 'api/v1/auth/registrations'
       }
-      resources :messages, only: [:index, :create]
+      resources :messages, only: [:index, :create] do
+        member do
+          patch :update_status
+        end
+      end
     end
   end
 end
