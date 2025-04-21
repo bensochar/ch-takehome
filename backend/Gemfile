@@ -11,6 +11,9 @@ gem 'mongoid', '~> 8.0'
 # Use Puma as the app server
 gem 'puma', '>= 5.0'
 
+# Use bootsnap for faster boot times
+gem 'bootsnap', '>= 1.4.4', require: false
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 

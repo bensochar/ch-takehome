@@ -1,16 +1,50 @@
-# Clear existing messages
 Message.delete_all
+User.delete_all
 
-# Generate 50 test messages
-50.times do
-  Message.create!(
-    content: Faker::Lorem.sentence(word_count: 3..10),
-    to_number: Faker::PhoneNumber.cell_phone,
-    from_number: Faker::PhoneNumber.cell_phone,
-    session_id: SecureRandom.uuid,
-    status: ['pending', 'success', 'failed'].sample,
-    created_at: Faker::Time.between(from: 30.days.ago, to: Time.now)
+10.times do
+  email = Faker::Internet.email
+	password = '123456'
+  user = User.new(
+    name: Faker::TvShows::Simpsons.character,
+    email: email,
+    password: password,
+    password_confirmation: password,
+    provider: 'email',
+    uid: email,
+    confirmed_at: Time.zone.now,
+    tokens: {}
   )
+
+  if user.valid?
+    user.save!
+		puts "User created: #{user.name}"
+  else
+    puts "User validation failed: #{user.errors.full_messages.join(', ')}"
+  end
 end
 
-puts "Created #{Message.count} messages"
+# Get all valid user IDs
+valid_user_ids = User.all.pluck(:id)
+
+
+
+50.times do
+  user_id = valid_user_ids.sample
+  user = User.find(user_id)
+  message = Message.new(
+    content: Faker::TvShows::Simpsons.quote,
+    to_number: Faker::PhoneNumber.cell_phone,
+    from_number: Faker::PhoneNumber.cell_phone,
+    user: user,
+    status: ['sending', 'sent', 'failed'].sample,
+    created_at: Faker::Time.between(from: 30.days.ago, to: Time.zone.now)
+  )
+
+  if message.valid?
+    message.save!
+    puts "Message created successfully"
+  else
+    puts "Errors: #{message.errors.full_messages.join(', ')}"
+  end
+end
+

@@ -1,0 +1,14 @@
+development:
+  account_sid: "your_development_account_sid"
+  auth_token: "your_development_auth_token"
+  app_url: "http://localhost:3000"
+
+test:
+  account_sid: "your_test_account_sid"
+  auth_token: "your_test_auth_token"
+  app_url: "http://localhost:3000"
+
+production:
+  account_sid: "your_production_account_sid"
+  auth_token: "your_production_auth_token"
+  app_url: "https://your-production-url.com"
