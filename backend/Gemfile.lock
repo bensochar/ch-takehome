@@ -113,6 +113,7 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -275,6 +276,7 @@ DEPENDENCIES
   devise
   devise_token_auth
   faker
+  foreman
   jbuilder
   mongoid (~> 8.0)
   puma (>= 5.0)
