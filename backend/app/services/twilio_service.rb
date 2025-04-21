@@ -1,18 +1,25 @@
 class TwilioService
-  def self.send_sms(to_number, from_number, content)
+  def send_sms(message)
     client = Twilio::REST::Client.new
 
     begin
-      message = client.messages.create(
-        to: to_number,
-        from: from_number,
-        body: content,
-        status_callback: "#{Rails.application.config.twilio['app_url']}/api/v1/messages/status"
+      twilio_message = client.messages.create(
+        to: message.to_number,
+        from: Rails.application.config.twilio[:phone_number],
+        body: message.content,
+        status_callback: "#{Rails.application.config.twilio[:app_url]}/api/v1/messages/status"
       )
 
-      { success: true, sid: message.sid }
+      message.update(
+        twilio_sid: twilio_message.sid,
+        twilio_status: twilio_message.status,
+        status: 'sent'
+      )
     rescue Twilio::REST::RestError => e
-      { success: false, error: e.message }
+      message.update(
+        status: 'failed',
+        twilio_status: e.message
+      )
     end
   end
 end

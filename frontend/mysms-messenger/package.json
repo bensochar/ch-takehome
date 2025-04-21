@@ -1,6 +1,9 @@
 {
   "name": "mysms-messenger",
   "version": "0.0.0",
+  "engines": {
+    "node": ">=18.19.1 <19.0.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

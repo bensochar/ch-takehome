@@ -24,12 +24,13 @@ class User
 
   has_many :messages
 
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :name, presence: true
   validates :password, presence: true, length: { minimum: 6 }, if: :password_required?
 
   # Callbacks
   before_validation :set_uid
+  before_validation :normalize_email
 
   private
 
@@ -39,5 +40,9 @@ class User
 
   def password_required?
     new_record? || !password.nil?
+  end
+
+  def normalize_email
+    self.email = email.downcase.strip if email.present?
   end
 end

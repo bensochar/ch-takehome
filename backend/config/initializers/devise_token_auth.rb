@@ -1,13 +1,19 @@
 DeviseTokenAuth.setup do |config|
+  # By default the authorization headers will change after each request. The
+  # client is responsible for keeping track of the changing tokens. Change
+  # this to false to prevent the Authorization header from changing after
+  # each request.
   config.change_headers_on_each_request = false
-  config.token_cost = Rails.env.test? ? 4 : 10
+  config.token_lifespan = 2.weeks
+  config.max_number_of_devices = 10
   config.batch_request_buffer_throttle = 5.seconds
-  config.redirect_whitelist = ['http://localhost:4200']
-  config.check_current_password_before_update = :password
-  config.enable_standard_devise_support = true
-  config.headers_names = {:'access-token' => 'access-token',
-                         :'client' => 'client',
-                         :'expiry' => 'expiry',
-                         :'uid' => 'uid',
-                         :'token-type' => 'token-type' }
+  config.omniauth_prefix = "/omniauth"
+  config.headers_names = {
+    :'authorization' => 'Authorization',
+    :'access-token' => 'access-token',
+    :'client' => 'client',
+    :'expiry' => 'expiry',
+    :'uid' => 'uid',
+    :'token-type' => 'token-type'
+  }
 end

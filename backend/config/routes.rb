@@ -7,11 +7,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-	Rails.application.routes.draw do
-		namespace :api do
-			namespace :v1 do
-				resources :messages, only: [:index, :create]
-			end
-		end
-	end
+
+  namespace :api do
+    namespace :v1 do
+      mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        sessions: 'api/v1/auth/sessions'
+      }
+      resources :messages, only: [:index, :create]
+    end
+  end
 end
